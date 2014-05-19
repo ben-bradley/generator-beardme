@@ -11,7 +11,7 @@ var BeardMeGenerator = module.exports = function BeardMeGenerator(args, options,
     var self = this;
     this.installDependencies({
       bower       : true,
-      npm         : false,
+      npm         : true,
       skipInstall : false,
       callback: function() {
         self.log.write('\n\n\nYou\'re almost there! You just have to init the build...\n\n');
