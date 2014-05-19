@@ -1,0 +1,92 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]>       <html class="no-js lt-ie9 lt-ie8 lt-ie7 ui-mobile-rendering" lang="en">   <![endif]-->
+<!--[if IE 7]>          <html class="no-js lt-ie9 lt-ie8 ui-mobile-rendering" lang="en">          <![endif]-->
+<!--[if IE 8]>          <html class="no-js lt-ie9 ui-mobile-rendering" lang="en">                 <![endif]-->
+<!--[if gt IE 8]><!-->  <html class='no-js ui-mobile-rendering' lang='en'>                    <!--<![endif]-->
+  <head>
+    <meta charset='utf-8'>
+    <!-- Use the .htaccess and remove these lines to avoid edge case issues. More info: h5bp.com/i/378 -->
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <title><%= projectName %></title>
+    <meta name='description' content='Backbone.js and Require.js Boilerplate Library'>
+    <!-- Mobile viewport optimized: h5bp.com/viewport -->
+    <meta name='viewport' content='user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width'>
+    <!--Detect if the browser is a mobile browser or a desktop browser and conditionally include your JavaScript -->
+    <script>
+      (function(ua, w, d, undefined) {
+        // App Environment
+        // ---------------
+        //  Tip: Set to true to turn on "production" mode
+        var production = false,
+            config = {
+              'dev-css'   : [ 'css/app.css' ], // Loaded when not in production mode
+              'prod-css'  : [ 'css/app.min.css' ], // Loaded when in production mode
+              'dev-js'    : [{ // Loaded when not in production mode
+                'data-main' : 'js/app/config/Init.js',
+                'src'       : 'js/libs/requirejs/require.js'
+              }],
+              'prod-js'   : [ 'js/app/config/Init.min.js' ] // Loaded when in production mode
+            };
+          // Loads the correct CSS and JavaScript files
+          loadFiles(config);
+
+          function loadCSS(urls, callback) {
+            var x, link;
+            for(x = 0; x <= urls.length - 1; x += 1) {
+              link = d.createElement('link');
+              link.type = 'text/css';
+              link.rel = 'stylesheet';
+              link.href = urls[x];
+              d.getElementsByTagName('head')[0].appendChild(link);
+            }
+            if(callback) callback();
+          }
+
+          function loadJS(files, callback) {
+            var x, script, file;
+            for(x = 0; x <= files.length - 1; x += 1) {
+              file = files[x];
+              script = d.createElement('script');
+              if(((typeof file).toLowerCase()) === 'object' && file['data-main'] !== undefined) {
+                script.setAttribute('data-main', file['data-main']);
+                script.async = true;
+                script.src = file.src;
+              }
+              else {
+                script.src = file;
+              }
+              d.getElementsByTagName('head')[0].appendChild(script);
+            }
+            if(callback) callback();
+          }
+
+          function loadFiles(obj, callback) {
+            if(production) {
+              // Loads the production CSS file(s)
+              loadCSS(obj['prod-css'], function() {
+                // If there are production JavaScript files to load
+                if(obj['prod-js']) {
+                  // Loads the correct initialization file (which includes Almond.js)
+                  loadJS(obj['prod-js'], callback);
+                }
+              });
+            }
+            // Else if your app is in development mode
+            else {
+              // Loads the development CSS file(s)
+              loadCSS(obj['dev-css'], function() {
+                // If there are development Javascript files to load
+                if(obj['dev-js']) {
+                  // Loads Require.js and tells Require.js to find the correct intialization file
+                  loadJS(obj['dev-js'], callback);
+                }
+              });
+            }
+          }
+      })(navigator.userAgent || navigator.vendor || window.opera, window, window.document);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

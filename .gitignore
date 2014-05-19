@@ -1,0 +1,7 @@
+node_modules/
+temp/
+TODO.md
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+*/*/*/.DS_Store

@@ -1,0 +1,33 @@
+{
+  "name": "<%= projectName %>",
+  "description": "I got Bearded! (http://github.com/ben-bradley/generator-beardme",
+  "version": "0.0.1",
+  "homepage": "https://github.com/<%= github %>/<%= projectName %>",
+  "author": {
+    "name": "<%= userName %>",
+    "url": "https://github.com/<%= github %>"
+  },
+  "main": "server/server.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/js/libs",
+    "*.sublime-project",
+    "*sublime-workspace"
+  ],
+  "devDependencies": {
+    "almond": "latest",
+    "jasmine": "latest",
+    "rjs": "latest",
+    "jasmine-jquery": "latest"
+  },
+  "dependencies": {
+    "backbone": "latest",
+    "lodash": "latest",
+    "jquery": "latest",
+    "requirejs": "latest",
+    "text": "latest",
+    "bootstrap": "latest",
+    "font-awesome": "latest"
+  }
+}

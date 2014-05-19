@@ -1,0 +1,52 @@
+{
+  "name": "generator-beardme",
+  "version": "0.1.0",
+  "description": "An Express, MongoDB, Backbone, Bootstrap, Require generator.",
+  "keywords": [
+    "yeoman-generator",
+    "Backbone.js",
+    "Require.js",
+    "Mocha",
+    "Jasmine,",
+    "bootstrap",
+    "backbone require boilerplate",
+    "backbone require workflow",
+    "test diven development",
+    "behavior driven development",
+    "TDD",
+    "BDD",
+    "Grunt",
+    "Bower",
+    "twitter",
+    "workflow"
+  ],
+  "homepage": "http://ben-bradley.github.io/generator-beardme",
+  "bugs": "https://github.com/ben-bradley/generator-beardme/issues",
+  "author": {
+    "name": "Ben Bradley",
+    "email": "ben@bradleyit.com",
+    "url": "https://github.com/ben-bradley"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ben-bradley/generator-beardme.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.13.4"
+  },
+  "devDependencies": {
+    "mocha": "~1.10.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}

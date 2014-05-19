@@ -1,0 +1,11 @@
+/* Main CSS */
+/* ======== */
+
+@import url('bootstrap.css');
+@import url('includes/css/custom.css');
+
+/* Font Awesome CSS */
+/* ================ */
+
+@import url("font-awesome.css"); 
+@import url("font-awesome-ie7.css"); 
