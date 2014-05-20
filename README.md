@@ -15,6 +15,7 @@ grunt server
 
 ##TODO
 - Add logging (Winston)
+- Add Socket.IO (?)
 - Add sub-generator for MVC
 - Write tests!
 
