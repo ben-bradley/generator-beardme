@@ -46,13 +46,18 @@ BeardMeGenerator.prototype.askFor = function askFor() {
   }, {
     name    : 'projectName',
     message : 'What do you want to name your app?',
-    default : 'Blargh App'
+    default : 'Beardy App'
+  }, {
+    name    : 'ssl',
+    type    : 'confirm',
+    message : 'Would you like to use self-signed SSL?'
   }];
 
   this.prompt(prompts, function(props) {
     this.userName     = props.userName;
     this.github       = props.github;
     this.projectName  = props.projectName;
+    this.ssl          = props.ssl;
     cb();
   }.bind(this));
 };
@@ -114,14 +119,10 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     // public/ files
     [ 'public/_index.html',       'public/index.html'       ],
     [ 'public/_SpecRunner.html',  'public/SpecRunner.html'  ],
-    [ 'public/_favicon.ico',      'public/favicon.ico'      ],
     // public/css files
     [ 'public/css/_app.css',                              'public/css/app.css'                              ],
     [ 'public/css/_jasmine.css',                          'public/css/jasmine.css'                          ],
     [ 'public/css/includes/css/_custom.css',              'public/css/includes/css/custom.css'              ],
-    // public/img files
-    [ 'public/img/_ajax-loader.gif',                      'public/img/ajax-loader.gif'                      ],
-    [ 'public/img/_jasmine-favicon.png',                  'public/img/jasmine-favicon.png'                  ],
     // public/js/app/{{ backbone stuff }}
     [ 'public/js/app/config/_Init.js',                    'public/js/app/config/Init.js'                    ],
     [ 'public/js/app/routers/_Router.js',                 'public/js/app/routers/Router.js'                 ],
@@ -133,10 +134,17 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ 'public/js/app/templates/_Main.html',               'public/js/app/templates/Main.html'               ],
     // add the templatized MVC stuff
     [ 'public/js/app/models/_TemplateModel.js',           'public/js/app/models/TemplateModel.js'           ],
-    [ 'public/js/app/collections/_TemplateCollection.js', 'public/js/app/collections/TemplateCollection'    ],
+    [ 'public/js/app/collections/_TemplateCollection.js', 'public/js/app/collections/TemplateCollection.js' ],
     [ 'public/js/app/views/_TemplateView.js',             'public/js/app/views/TemplateView.js'             ],
     [ 'public/js/app/templates/_Template.html',           'public/js/app/templates/Template.html'           ]
   ].forEach(function(file) { self.template(file[0], file[1]); });
+
+  [ // files to copy w/o templating
+    [ 'public/img/beard.png',           'public/img/beard.png'            ],
+    [ 'public/img/ajax-loader.gif',     'public/img/ajax-loader.gif'      ],
+    [ 'public/img/jasmine-favicon.png', 'public/img/jasmine-favicon.png'  ],
+    [ 'public/favicon.ico',             'public/favicon.ico'              ]
+  ].forEach(function(file) { self.copy(file[0], file[1]); });
 
   // Tests
   //this.copy('public/_TestInit.js', 'public/js/tests/config/TestInit.js');

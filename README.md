@@ -10,3 +10,6 @@ yo beardme
 grunt init
 grunt server
 ```
+##0.1.2
+- Added support for SSL via the [PEM](http://npmjs.org/package/pem) module
+- Added some beardy bling

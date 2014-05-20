@@ -1,7 +1,9 @@
 // DEPENDENCIES
 // ============
-var express   = require('express'),
-    http      = require('http'),
+var express   = require('express'),<% if (ssl == false) { %>
+    http      = require('http'),<% } %><% if (ssl == true) { %>
+    https     = require('https'),
+    pem       = require('pem'),<% } %>
     mongoose  = require('mongoose'),
     fs        = require('fs'),
     path      = require('path');
@@ -10,7 +12,8 @@ var config    = require('./config/config'),
     paths     = {
       api     : path.resolve(__dirname+'/api'),
       schemas : path.resolve(__dirname+'/schemas')
-    };
+    },
+    app       = express();
 
 var dbstring  = 'mongodb://'+
                 ((config.db.username) ? config.db.username : '')+
@@ -20,9 +23,6 @@ var dbstring  = 'mongodb://'+
                 '/'+config.db.name,
     db        = mongoose.createConnection(dbstring),
     schemas   = {};
-
-var app       = express(),
-    server    = http.createServer(app);
 
 // DATABASE CONFIGURATION
 // ======================
@@ -63,6 +63,9 @@ fs.readdir(paths.api, function(err, files) {
 
 // KICK THIS PIG!
 // ==============
-server.listen(config.port);
+<% if (ssl == false) { %>var server = http.createServer(app);
+server.listen(config.port);<% } %><% if (ssl == true) { %>pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
+  https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app).listen(config.port);
+});<% } %>
 
-console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http://localhost:' + config.port + ' to wear your Beard\n\n');
+console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http<% if (ssl == true) { %>s<% } %>://localhost:' + config.port + ' to wear your Beard\n\n');
