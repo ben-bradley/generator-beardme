@@ -37,27 +37,48 @@ BeardMeGenerator.prototype.askFor = function askFor() {
 
   var prompts = [{
     name    : 'userName',
+    type    : 'input',
     message : 'What is your name?',
     default : 'John Doh'
   }, {
     name    : 'github',
+    type    : 'input',
     message : 'What is your github username?',
     default : 'jdoh'
   }, {
     name    : 'projectName',
+    type    : 'input',
     message : 'What do you want to name your app?',
-    default : 'Beardy App'
+    default : 'BeardyApp'
+  }, {
+    name    : 'httpPort',
+    type    : 'input',
+    message : 'What port shoud the app listen on?',
+    default : '8000'
   }, {
     name    : 'ssl',
     type    : 'confirm',
     message : 'Would you like to use self-signed SSL?'
+  }, {
+    name    : 'mongoHost',
+    type    : 'input',
+    message : 'MongoDB hostname',
+    default : 'localhost'
+  }, {
+    name    : 'mongoPort',
+    type    : 'input',
+    message : 'MongoDB port',
+    default : '27017'
+  }, {
+    name    : 'mongoDatabase',
+    type    : 'input',
+    message : 'MongoDB database',
+    default : 'beardme'
   }];
 
   this.prompt(prompts, function(props) {
-    this.userName     = props.userName;
-    this.github       = props.github;
-    this.projectName  = props.projectName;
-    this.ssl          = props.ssl;
+    for (var p in props)
+      this[p] = props[p];
     cb();
   }.bind(this));
 };
@@ -112,13 +133,14 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ '_.gitignore',    '.gitignore'   ],
     [ '_.travis.yml',   '.travis.yml'  ],
     // server/ files
-    [ 'server/_server.js',        'server/server.js'        ],
-    [ 'server/api/_user.js',      'server/api/user.js'      ],
-    [ 'server/config/_config.js', 'server/config/config.js' ],
-    [ 'server/schemas/_user.js',  'server/schemas/user.js'  ],
+    [ 'server/_server.js',            'server/server.js'        ],
+    [ 'server/api/_user.js',          'server/api/user.js'      ],
+    [ 'server/api/_ping.js',          'server/api/ping.js'      ],
+    [ 'server/config/_config.js',     'server/config/config.js' ],
+    [ 'server/schemas/_user.js',      'server/schemas/user.js'  ],
     // public/ files
-    [ 'public/_index.html',       'public/index.html'       ],
-    [ 'public/_SpecRunner.html',  'public/SpecRunner.html'  ],
+    [ 'public/_index.html',           'public/index.html'       ],
+    [ 'public/_SpecRunner.html',      'public/SpecRunner.html'  ],
     // public/css files
     [ 'public/css/_app.css',                              'public/css/app.css'                              ],
     [ 'public/css/_jasmine.css',                          'public/css/jasmine.css'                          ],

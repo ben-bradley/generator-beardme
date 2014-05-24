@@ -1,6 +1,6 @@
 {
   "name": "generator-beardme",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "An Express, MongoDB, Backbone, Bootstrap, Require generator.",
   "keywords": [
     "yeoman-generator",

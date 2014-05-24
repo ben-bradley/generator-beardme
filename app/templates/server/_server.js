@@ -16,24 +16,19 @@ var config    = require('./config/config'),
     app       = express();
 
 var dbstring  = 'mongodb://'+
-                ((config.db.username) ? config.db.username : '')+
-                ((config.db.password) ? ':'+config.db.password : '')+
-                config.db.host+
-                ((config.db.port) ? ':'+config.db.port : '')+
-                '/'+config.db.name,
-    db        = mongoose.createConnection(dbstring),
-    schemas   = {};
+                ((config.db.username && config.db.password) ? config.db.username+':'+config.db.password+'@' : '')+
+                config.db.host+':'+config.db.port+'/'+config.db.dbname,
+    db        = mongoose.createConnection(dbstring);
 
 // DATABASE CONFIGURATION
 // ======================
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function callback () {
-  console.log('Connected to ' + config.db.name);
+  console.log('Connected to ' + config.db.dbname);
   fs.readdir(paths.schemas, function(err, files) {
     files.forEach(function(file) {
       if (!/\.js$/.test(file)) return false;
-      var Schema = require(paths.schemas+'/'+file);
-      schemas[Schema.name] = new Schema(db);
+      require(paths.schemas+'/'+file)(db);
     });
   });
 });
@@ -57,7 +52,7 @@ app.configure(function() {
 fs.readdir(paths.api, function(err, files) {
   files.forEach(function(file) {
     if (!/\.js$/.test(file)) return false;
-    require(paths.api+'/'+file)(app, schemas);
+    require(paths.api+'/'+file)(app, db);
   });
 });
 

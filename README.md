@@ -19,6 +19,10 @@ grunt server
 - Add sub-generator for MVC
 - Write tests!
 
+##0.1.3
+- Rewrote the MongoDB Schema handler to use `Schema.statics` instead of `prototype`ing
+- Added prompts to populate config.js for MongoDB
+
 ##0.1.2
 - Added support for SSL via the [PEM](http://npmjs.org/package/pem) module
 - Added some beardy bling

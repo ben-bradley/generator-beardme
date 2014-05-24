@@ -6,19 +6,16 @@ module.exports = User;
 
 function User(db) {
 
-  this.name = 'User';
-
-  this.schema = new mongoose.Schema({
+  var Schema = new mongoose.Schema({
     name: String,
     password: String,
     _loggedIn: { type: Boolean, default: null }
   });
 
-  this.model = db.model('User', this.schema);
+  Schema.statics.myFindAll = function(callback) {
+    this.find(callback);
+  };
 
-  return this;
+  db.model('User', Schema);
+
 };
-
-User.prototype.myfindall = function(callback) {
-  this.model.find({}, callback);
-}
