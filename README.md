@@ -14,10 +14,14 @@ grunt server
 ```
 
 ##TODO
-- Add logging (Winston)
+- Clean up namespace pollution of index.js
+- Write tests!
 - Add Socket.IO (?)
 - Add sub-generator for MVC
-- Write tests!
+- JSON proxy
+
+##0.1.4
+- Added Winston for logging
 
 ##0.1.3
 - Rewrote the MongoDB Schema handler to use `Schema.statics` instead of `prototype`ing

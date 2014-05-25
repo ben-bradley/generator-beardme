@@ -3,7 +3,8 @@
 var express   = require('express'),<% if (ssl == false) { %>
     http      = require('http'),<% } %><% if (ssl == true) { %>
     https     = require('https'),
-    pem       = require('pem'),<% } %>
+    pem       = require('pem'),<% } %><% if (winston == true) { %>
+    winston   = require('winston'),<% } %>
     mongoose  = require('mongoose'),
     fs        = require('fs'),
     path      = require('path');
@@ -15,13 +16,28 @@ var config    = require('./config/config'),
     },
     app       = express();
 
+<% if (winston == true) { %>// LOGGING CONFIGURATION
+// =====================
+app.logger = new(winston.Logger)({
+  transports: [
+    new (winston.transports.File)({
+      filename: './server/logs/app.log',
+      json: false
+    })
+  ]
+});
+var logStream = {
+  write: function(message, encoding){
+    app.logger.info(message.replace(/\n+/,''));
+  }
+};
+
+<% } %>// DATABASE CONFIGURATION
+// ======================
 var dbstring  = 'mongodb://'+
                 ((config.db.username && config.db.password) ? config.db.username+':'+config.db.password+'@' : '')+
                 config.db.host+':'+config.db.port+'/'+config.db.dbname,
     db        = mongoose.createConnection(dbstring);
-
-// DATABASE CONFIGURATION
-// ======================
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function callback () {
   console.log('Connected to ' + config.db.dbname);
@@ -43,7 +59,8 @@ app.configure(function() {
   }));
   app.use(express.bodyParser());
   app.use(express.cookieParser());
-  app.use(express.session({ secret: config.sessionSecret }));
+  app.use(express.session({ secret: config.sessionSecret }));<% if (winston == true) { %>
+  app.use(express.logger({ stream: logStream }));<% } %>
   app.use(app.router);
 });
 

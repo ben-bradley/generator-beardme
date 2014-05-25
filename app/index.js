@@ -60,6 +60,10 @@ BeardMeGenerator.prototype.askFor = function askFor() {
     type    : 'confirm',
     message : 'Would you like to use self-signed SSL?'
   }, {
+    name    : 'winston',
+    type    : 'confirm',
+    message : 'Would you like to use Winston for logging?'
+  }, {
     name    : 'mongoHost',
     type    : 'input',
     message : 'MongoDB hostname',
@@ -92,6 +96,7 @@ BeardMeGenerator.prototype.app = function app() {
     'server/api',
     'server/schemas',
     'server/db',
+    'server/logs',
     'public',
     'public/fonts',
     'public/css',
