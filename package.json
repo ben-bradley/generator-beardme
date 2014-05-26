@@ -1,14 +1,14 @@
 {
   "name": "generator-beardme",
-  "version": "0.1.4",
-  "description": "An Express, MongoDB, Backbone, Bootstrap, Require generator.",
+  "version": "0.1.5",
+  "description": "An Express, MongoDB (Mongoose), Backbone, Bootstrap, Require generator.",
   "keywords": [
     "yeoman-generator",
     "Backbone",
     "RequireJS",
     "Mocha",
     "Bootstrap",
-    "Mongo",
+    "MongoDB",
     "Mongoose",
     "Grunt",
     "Bower",
@@ -30,10 +30,10 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.13.4"
+    "yeoman-generator": ">=0.17.0"
   },
   "devDependencies": {
-    "mocha": "~1.10.0"
+    "mocha": ">=1.19.0"
   },
   "engines": {
     "node": ">=0.8.0"

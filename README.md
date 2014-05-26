@@ -10,15 +10,25 @@ npm install -g yeoman generator-beardme grunt
 yo beardme
 grunt init
 vi server/config/config.js
+grunt test
 grunt server
 ```
 
 ##TODO
-- Clean up namespace pollution of index.js
-- Write tests!
+- Write more tests
+- Clean up the `public/` side
+- Re-work the non-dev aspects
 - Add Socket.IO (?)
 - Add sub-generator for MVC
-- JSON proxy
+- ideas?
+
+##0.1.5
+- **!!!UPDATED DEPENDENCIES!!!** - All dependencies are now current & tests work.  If your generated apps behave strangely, please let me know & I'll look in to it.
+- Added browser auto-launch on server start
+- Moved Yeoman prompt input vars into an `inputs` namespace
+- Wrote server tests
+- Added `jsonp.js` to the `server/api/`, look at `public/js/app/templates/Main.html` for how to use it =)
+- Added a beard counter using `jsonp.js`
 
 ##0.1.4
 - Added Winston for logging

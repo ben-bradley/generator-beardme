@@ -1,10 +1,16 @@
 // DEPENDENCIES
 // ============
-var express   = require('express'),<% if (ssl == false) { %>
-    http      = require('http'),<% } %><% if (ssl == true) { %>
+var express   = require('express'),
+    bodyParser  = require('body-parser'),
+    errorHandler = require('errorhandler'),
+    cookieParser = require('cookie-parser'),
+    session = require('express-session'),
+    morgan = require('morgan'),<% if (inputs.ssl == false) { %>
+    http      = require('http'),<% } %><% if (inputs.ssl == true) { %>
     https     = require('https'),
-    pem       = require('pem'),<% } %><% if (winston == true) { %>
+    pem       = require('pem'),<% } %><% if (inputs.winston == true) { %>
     winston   = require('winston'),<% } %>
+    request   = require('request'),
     mongoose  = require('mongoose'),
     fs        = require('fs'),
     path      = require('path');
@@ -14,9 +20,9 @@ var config    = require('./config/config'),
       api     : path.resolve(__dirname+'/api'),
       schemas : path.resolve(__dirname+'/schemas')
     },
-    app       = express();
+    app       = module.exports = express();
 
-<% if (winston == true) { %>// LOGGING CONFIGURATION
+<% if (inputs.winston == true) { %>// LOGGING CONFIGURATION
 // =====================
 app.logger = new(winston.Logger)({
   transports: [
@@ -51,18 +57,15 @@ db.once('open', function callback () {
 
 // APP CONFIGURATION
 // =================
-app.configure(function() {
-  app.use(express['static'](__dirname + '/../public'));
-  app.use(express.errorHandler({
-    dumpExceptions: true,
-    showStack: true
-  }));
-  app.use(express.bodyParser());
-  app.use(express.cookieParser());
-  app.use(express.session({ secret: config.sessionSecret }));<% if (winston == true) { %>
-  app.use(express.logger({ stream: logStream }));<% } %>
-  app.use(app.router);
-});
+app.use(express.static(__dirname + '/../public'));
+app.use(errorHandler({
+  dumpExceptions: true,
+  showStack: true
+}));
+app.use(bodyParser());
+app.use(cookieParser());
+app.use(session({ secret: config.sessionSecret }));<% if (inputs.winston == true) { %>
+app.use(morgan({ stream: logStream }));<% } %>
 
 // READ THE API MODULES
 // ====================
@@ -75,9 +78,12 @@ fs.readdir(paths.api, function(err, files) {
 
 // KICK THIS PIG!
 // ==============
-<% if (ssl == false) { %>var server = http.createServer(app);
-server.listen(config.port);<% } %><% if (ssl == true) { %>pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
-  https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app).listen(config.port);
+<% if (inputs.ssl == false) { %>var server = http.createServer(app);
+server.on('listening', function() { app.emit('listening'); });
+server.listen(config.port);<% } %><% if (inputs.ssl == true) { %>pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
+  var server = https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app);
+  server.on('listening', function() { app.emit('listening'); });
+  server.listen(config.port);
 });<% } %>
 
-console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http<% if (ssl == true) { %>s<% } %>://localhost:' + config.port + ' to wear your Beard\n\n');
+console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http<% if (inputs.ssl == true) { %>s<% } %>://localhost:' + config.port + ' to wear your Beard\n\n');

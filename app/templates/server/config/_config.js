@@ -3,7 +3,7 @@
 module.exports = {
 
   // port to start the app on
-  port: <%= httpPort %>,
+  port: <%= inputs.httpPort %>,
 
   // this could be anything, I chose to use the date
   sessionSecret: ''+new Date().getTime(),
@@ -12,9 +12,9 @@ module.exports = {
   db: {
     //username: 'dbusername',
     //password: 'dbpassword',
-    host: '<%= mongoHost %>',
-    port: <%= mongoPort %>,
-    dbname: '<%= mongoDatabase %>'
+    host: '<%= inputs.mongoHost %>',
+    port: <%= inputs.mongoPort %>,
+    dbname: '<%= inputs.mongoDatabase %>'
   }
 
 };

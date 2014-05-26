@@ -1,20 +1,21 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
     nodemon: {
       dev: {
+        script: 'server/server.js',
         options: {
-          file: 'server/server.js',
-          args: [ 'dev' ],
           ignoredFiles: [ 'README.md', 'node_modules/**' ],
-          watchedExtensions: [ 'js' ],
-          debug: false,
-          delayTime: 1,
-          env: {
-            PORT: '8000'
-          },
-          cwd: __dirname
+          delayTime: 300,
+          watch: [ 'server' ],
+          callback: function(nodemon) {
+            nodemon.on('log', function(event) {
+              console.log(event.colour);
+            });
+            nodemon.once('start', function() {
+              require('open')('http<% if (inputs.ssl == true) { %>s<% } %>://localhost:<%= inputs.httpPort %>');
+            });
+          }
         }
       },
       exec: {
@@ -63,7 +64,7 @@ module.exports = function(grunt) {
         options: {
           reporter: 'spec'
         },
-        src: [ 'server/tests/**/*.js' ]
+        src: [ 'server/test/*.js' ]
       }
     },
     shell: {
@@ -71,7 +72,7 @@ module.exports = function(grunt) {
         command: 'cp ./public/js/libs/bootstrap/dist/css/bootstrap.css ./public/css/bootstrap.css'
       },
       copyFontAwesomeCSS: {
-        command: 'cp ./public/js/libs/font-awesome/css/font-awesome.css ./public/css/font-awesome.css && cp ./public/js/libs/font-awesome/css/font-awesome-ie7.css ./public/css/font-awesome-ie7.css'
+        command: 'cp ./public/js/libs/font-awesome/css/font-awesome.css ./public/css/font-awesome.css'
       },
       copyFontAwesomeFonts: {
         command: 'cp -r ./public/js/libs/font-awesome/fonts/* ./public/fonts'

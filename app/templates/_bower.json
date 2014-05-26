@@ -1,11 +1,11 @@
 {
-  "name": "<%= projectName %>",
+  "name": "<%= inputs.projectName %>",
   "description": "I got Bearded! (http://github.com/ben-bradley/generator-beardme",
   "version": "0.0.1",
-  "homepage": "https://github.com/<%= github %>/<%= projectName %>",
+  "homepage": "https://github.com/<%= inputs.github %>/<%= inputs.projectName %>",
   "author": {
-    "name": "<%= userName %>",
-    "url": "https://github.com/<%= github %>"
+    "name": "<%= inputs.userName %>",
+    "url": "https://github.com/<%= inputs.github %>"
   },
   "main": "server/server.js",
   "ignore": [

@@ -1,41 +1,48 @@
 {
-  "name": "<%= projectName %>",
+  "name": "<%= inputs.projectName %>",
   "description": "I got Bearded! (http://github.com/ben-bradley/generator-beardme",
   "version": "0.0.1",
-  "homepage": "https://github.com/<%= github %>/<%= projectName %>",
+  "homepage": "https://github.com/<%= inputs.github %>/<%= inputs.projectName %>",
   "author": {
-    "name": "<%= userName %>",
-    "url": "https://github.com/<%= github %>"
+    "name": "<%= inputs.userName %>",
+    "url": "https://github.com/<%= inputs.github %>"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:<%= github %>/<%= projectName %>.git"
+    "url": "git@github.com:<%= inputs.github %>/<%= inputs.projectName %>.git"
   },
-  "homepage": "https://<%= github %>.github.io/<%= projectName %>",
+  "homepage": "https://<%= inputs.github %>.github.io/<%= inputs.projectName %>",
   "keywords": [
     "generator-beardme",
     "generator-stacked"
   ],
   "bugs": {
-    "url": "https://github.com/<%= github %>/<%= projectName %>/issues"
+    "url": "https://github.com/<%= inputs.github %>/<%= inputs.projectName %>/issues"
   },
   "main": "./server/server",
   "dependencies": {
-    "express": "3.x"<% if (ssl == true) { %>,
-    "pem": "^1.4.1"<% } %><% if (winston == true) { %>,
-    "winston": "^0.7.3"<% } %>
+    "express"           : ">=4.3.1",
+    "body-parser"       : ">=1.2.0",
+    "errorhandler"      : ">=1.0.1",
+    "cookie-parser"     : ">=1.1.0",
+    "express-session"   : ">=1.2.0",
+    "morgan"            : ">=1.1.1",
+    "request"           : ">=2.36.0",
+    "mongoose"          : ">=3.8.11"<% if (inputs.ssl == true) { %>,
+    "pem"               : ">=1.4.1"<% } %><% if (inputs.winston == true) { %>,
+    "winston"           : ">=0.7.3"<% } %>
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-nodemon": "0.0.9",
-    "grunt-contrib-requirejs": "~0.4.0",
-    "grunt-contrib-jshint": "~0.3.0",
-    "grunt-shell": "~0.3.1",
-    "grunt-contrib-less": "~0.6.4",
-    "grunt-mocha-test": "~0.6.2",
-    "mongoose": "~3.6.19",
-    "superagent": "~0.15.4",
-    "expect.js": "~0.2.0",
-    "uglify-js": "~2.2.5"
+    "grunt"                   : ">=0.4.5",
+    "grunt-nodemon"           : ">=0.2.1",
+    "grunt-open"              : ">=0.2.3",
+    "grunt-contrib-requirejs" : ">=0.4.4",
+    "grunt-contrib-jshint"    : ">=0.10.0",
+    "grunt-shell"             : ">=0.7.0",
+    "grunt-contrib-less"      : ">=0.11.0",
+    "grunt-mocha-test"        : ">=0.10.2",
+    "expect.js"               : ">=0.3.1",
+    "uglify-js"               : ">=2.4.13",
+    "open"                    : ">=0.0.5"
   }
 }

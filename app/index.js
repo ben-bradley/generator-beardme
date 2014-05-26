@@ -18,6 +18,8 @@ var BeardMeGenerator = module.exports = function BeardMeGenerator(args, options,
         self.log.write('  $ grunt init\n\n');
         self.log.write('Then update you\'re server/config/config.js with your details:\n\n');
         self.log.write('  $ vi server/config/config.js\n\n');
+        self.log.write('You might also want to test it to make sure it\'s working:\n\n');
+        self.log.write('  $ grunt test\n\n');
         self.log.write('Then start it up!\n\n');
         self.log.write('  $ grunt server\n\n');
       }
@@ -81,8 +83,9 @@ BeardMeGenerator.prototype.askFor = function askFor() {
   }];
 
   this.prompt(prompts, function(props) {
+    this.inputs = {};
     for (var p in props)
-      this[p] = props[p];
+      this.inputs[p] = props[p];
     cb();
   }.bind(this));
 };
@@ -97,6 +100,7 @@ BeardMeGenerator.prototype.app = function app() {
     'server/schemas',
     'server/db',
     'server/logs',
+    'server/test',
     'public',
     'public/fonts',
     'public/css',
@@ -117,11 +121,6 @@ BeardMeGenerator.prototype.app = function app() {
     'public/js/app/events'
   ].forEach(function(dir) { self.mkdir(dir); });
 
-  // TESTS
-  //this.mkdir('public/js/tests');
-  //this.mkdir('public/js/tests/config');
-  //this.mkdir('public/js/tests/specs');
-
 };
 
 BeardMeGenerator.prototype.projectfiles = function projectfiles() {
@@ -141,8 +140,10 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ 'server/_server.js',            'server/server.js'        ],
     [ 'server/api/_user.js',          'server/api/user.js'      ],
     [ 'server/api/_ping.js',          'server/api/ping.js'      ],
+    [ 'server/api/_jsonp.js',         'server/api/jsonp.js'     ],
     [ 'server/config/_config.js',     'server/config/config.js' ],
     [ 'server/schemas/_user.js',      'server/schemas/user.js'  ],
+    [ 'server/test/_spec.js',         'server/test/spec.js'     ],
     // public/ files
     [ 'public/_index.html',           'public/index.html'       ],
     [ 'public/_SpecRunner.html',      'public/SpecRunner.html'  ],

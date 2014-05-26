@@ -7,6 +7,7 @@ define([ 'jquery', 'backbone', 'models/UserModel', 'text!templates/Main.html' ],
         this.model = new UserModel();
         this.model.on('change:_loggedIn', this.render, this);
         this.model.fetch();
+        this.getBeardCount();
       },
       events: {
         'click [data-login]': 'login',
@@ -28,6 +29,12 @@ define([ 'jquery', 'backbone', 'models/UserModel', 'text!templates/Main.html' ],
         this.model.destroy({
           success: function() { self.model.fetch(); },
           error: function() { self.model.fetch(); }
+        });
+      },
+      getBeardCount: function() {
+        var self = this;
+        $.getJSON('api/jsonp/https://api.npmjs.org/downloads/point/last-week/generator-beardme', function(json) {
+          self.$('#beardCount').removeClass().html(json.downloads);
         });
       }
     });
