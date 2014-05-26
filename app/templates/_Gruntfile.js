@@ -13,7 +13,9 @@ module.exports = function(grunt) {
               console.log(event.colour);
             });
             nodemon.once('start', function() {
-              require('open')('http<% if (inputs.ssl == true) { %>s<% } %>://localhost:<%= inputs.httpPort %>');
+              setTimeout(function() {
+                require('open')('http<% if (inputs.ssl == true) { %>s<% } %>://localhost:<%= inputs.httpPort %>');
+              }, 1500);
             });
           }
         }
@@ -29,7 +31,8 @@ module.exports = function(grunt) {
         options: {
           baseUrl: 'public/js/',
           paths: {
-            desktop: 'app/config/Init'
+            desktop: 'app/config/Init'<% if (inputs.socketio == true) { %>,
+            socketio: 'empty:'<% } %>
           },
           wrap: true,
           name: 'libs/almond/almond',

@@ -1,24 +1,26 @@
 // DEPENDENCIES
 // ============
-var express   = require('express'),
-    bodyParser  = require('body-parser'),
-    errorHandler = require('errorhandler'),
-    cookieParser = require('cookie-parser'),
-    session = require('express-session'),
-    morgan = require('morgan'),<% if (inputs.ssl == false) { %>
-    http      = require('http'),<% } %><% if (inputs.ssl == true) { %>
-    https     = require('https'),
-    pem       = require('pem'),<% } %><% if (inputs.winston == true) { %>
-    winston   = require('winston'),<% } %>
-    request   = require('request'),
-    mongoose  = require('mongoose'),
-    fs        = require('fs'),
-    path      = require('path');
+var express       = require('express'),
+    bodyParser    = require('body-parser'),
+    errorHandler  = require('errorhandler'),
+    cookieParser  = require('cookie-parser'),
+    session       = require('express-session'),
+    morgan        = require('morgan'),<% if (inputs.ssl == false) { %>
+    http          = require('http'),<% } %><% if (inputs.ssl == true) { %>
+    https         = require('https'),
+    pem           = require('pem'),<% } %><% if (inputs.winston == true) { %>
+    winston       = require('winston'),<% } %><% if (inputs.socketio == true) { %>
+    socketio      = require('socket.io'),<% } %>
+    request       = require('request'),
+    mongoose      = require('mongoose'),
+    fs            = require('fs'),
+    path          = require('path');
 
 var config    = require('./config/config'),
     paths     = {
       api     : path.resolve(__dirname+'/api'),
-      schemas : path.resolve(__dirname+'/schemas')
+      schemas : path.resolve(__dirname+'/schemas'),
+      io      : path.resolve(__dirname+'/io')
     },
     app       = module.exports = express();
 
@@ -79,11 +81,30 @@ fs.readdir(paths.api, function(err, files) {
 // KICK THIS PIG!
 // ==============
 <% if (inputs.ssl == false) { %>var server = http.createServer(app);
-server.on('listening', function() { app.emit('listening'); });
+server.on('listening', function() { app.emit('listening'); });<% if (inputs.socketio) { %>
+// SOCKET.IO CONFIGURATION
+// =======================
+var io = socketio.listen(server);
+fs.readdir(paths.io, function(err, files) {
+  files.forEach(function(file) {
+    if (!/\.js$/.test(file)) return false;
+    require(paths.io+'/'+file)(app, db, io);
+  });
+});<% } %>
 server.listen(config.port);<% } %><% if (inputs.ssl == true) { %>pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
   var server = https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app);
-  server.on('listening', function() { app.emit('listening'); });
+  server.on('listening', function() { app.emit('listening'); });<% if (inputs.socketio) { %>
+  // SOCKET.IO CONFIGURATION
+  // =======================
+  var io = socketio.listen(server);
+  fs.readdir(paths.io, function(err, files) {
+    files.forEach(function(file) {
+      if (!/\.js$/.test(file)) return false;
+      require(paths.io+'/'+file)(app, db, io);
+    });
+  });<% } %>
   server.listen(config.port);
 });<% } %>
 
 console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http<% if (inputs.ssl == true) { %>s<% } %>://localhost:' + config.port + ' to wear your Beard\n\n');
+

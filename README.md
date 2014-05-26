@@ -22,6 +22,10 @@ grunt server
 - Add sub-generator for MVC
 - ideas?
 
+##0.1.6
+- Added Socket.IO! You can select it at the `yo beardme` prompt.  Look in `public/js/app/views/MainView.js` for an example of how to use it.
+- Prevented `Router.js` from loading `MainView.js` twice
+
 ##0.1.5
 - **!!!UPDATED DEPENDENCIES!!!** - All dependencies are now current & tests work.  If your generated apps behave strangely, please let me know & I'll look in to it.
 - Added browser auto-launch on server start

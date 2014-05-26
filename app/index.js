@@ -62,6 +62,10 @@ BeardMeGenerator.prototype.askFor = function askFor() {
     type    : 'confirm',
     message : 'Would you like to use self-signed SSL?'
   }, {
+    name    : 'socketio',
+    type    : 'confirm',
+    message : 'Would you like to use Socket.IO?'
+  }, {
     name    : 'winston',
     type    : 'confirm',
     message : 'Would you like to use Winston for logging?'
@@ -101,6 +105,7 @@ BeardMeGenerator.prototype.app = function app() {
     'server/db',
     'server/logs',
     'server/test',
+    'server/io',
     'public',
     'public/fonts',
     'public/css',
@@ -141,6 +146,7 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ 'server/api/_user.js',          'server/api/user.js'      ],
     [ 'server/api/_ping.js',          'server/api/ping.js'      ],
     [ 'server/api/_jsonp.js',         'server/api/jsonp.js'     ],
+    [ 'server/io/_time.js',           'server/io/time.js'       ],
     [ 'server/config/_config.js',     'server/config/config.js' ],
     [ 'server/schemas/_user.js',      'server/schemas/user.js'  ],
     [ 'server/test/_spec.js',         'server/test/spec.js'     ],

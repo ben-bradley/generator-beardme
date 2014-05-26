@@ -26,7 +26,8 @@
       <h1>You've been Bearded!</h1>
       <p>The <code>generator-beardme</code> project is based on <code>generator-stacked</code>.  Thanks to Randy Lebeau for blazing the trail!</p>
       <p>Now it's your turn.  What do you want to do with this app?</p>
-      <h2>Beards grown this week: <span id='beardCount' class='fa fa-circle-o-notch fa-spin'></span></h2>
+      <h2>Beards grown this week: <span id='beardCount' class='fa fa-circle-o-notch fa-spin'></span></h2><% if (inputs.socketio == true) { %>
+      <p>Server time is: <span id='time' class='fa fa-circle-o-notch fa-spin'></span></p><% } %>
     </div>
   </div>
 </div>

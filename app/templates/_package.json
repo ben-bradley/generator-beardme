@@ -30,7 +30,8 @@
     "request"           : ">=2.36.0",
     "mongoose"          : ">=3.8.11"<% if (inputs.ssl == true) { %>,
     "pem"               : ">=1.4.1"<% } %><% if (inputs.winston == true) { %>,
-    "winston"           : ">=0.7.3"<% } %>
+    "winston"           : ">=0.7.3"<% } %><% if (inputs.socketio == true) { %>,
+    "socket.io"         : ">=0.9.17"<% } %>
   },
   "devDependencies": {
     "grunt"                   : ">=0.4.5",

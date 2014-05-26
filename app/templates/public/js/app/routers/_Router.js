@@ -14,8 +14,6 @@ define([ 'jquery', 'backbone', 'views/MainView' ],
         new MainView(); // Instantiates a new view which will render the header text to the page
       }
     });
-    // Render the Main view
-    new MainView();
     // Returns the Router
     return Router;
   }
