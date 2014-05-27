@@ -15,6 +15,8 @@ grunt server
 ```
 
 ##TODO
+- Build evented load to prevent `api/` from loading before `schemas/`
+- Add `if (inputs.socketio) { ...` to the top of `MainView.js`
 - Write more tests
 - Clean up the `public/` side
 - Re-work the non-dev aspects
