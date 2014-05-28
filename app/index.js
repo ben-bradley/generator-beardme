@@ -62,28 +62,20 @@ BeardMeGenerator.prototype.askFor = function askFor() {
     type    : 'confirm',
     message : 'Would you like to use self-signed SSL?'
   }, {
-    name    : 'socketio',
-    type    : 'confirm',
-    message : 'Would you like to use Socket.IO?'
-  }, {
-    name    : 'winston',
-    type    : 'confirm',
-    message : 'Would you like to use Winston for logging?'
-  }, {
-    name    : 'mongoHost',
+    name    : 'devDb',
     type    : 'input',
-    message : 'MongoDB hostname',
-    default : 'localhost'
+    message : 'DEV MongoDB (user:pass@host:port/db)',
+    default : 'localhost:27017/beardme'
   }, {
-    name    : 'mongoPort',
+    name    : 'testDb',
     type    : 'input',
-    message : 'MongoDB port',
-    default : '27017'
+    message : 'TEST MongoDB',
+    default : 'user:pass@test-mongodb:27018/beardme'
   }, {
-    name    : 'mongoDatabase',
+    name    : 'prodDb',
     type    : 'input',
-    message : 'MongoDB database',
-    default : 'beardme'
+    message : 'PROD MongoDB',
+    default : 'user:pass@mongodb:27017/beardme'
   }];
 
   this.prompt(prompts, function(props) {
@@ -94,9 +86,7 @@ BeardMeGenerator.prototype.askFor = function askFor() {
   }.bind(this));
 };
 
-BeardMeGenerator.prototype.app = function app() {
-  var self = this;
-
+BeardMeGenerator.prototype.buildDirs = function buildDirs() {
   [
     'server',
     'server/config',
@@ -124,14 +114,12 @@ BeardMeGenerator.prototype.app = function app() {
     'public/js/app/templates',
     'public/js/app/views',
     'public/js/app/events'
-  ].forEach(function(dir) { self.mkdir(dir); });
-
+  ].forEach(this.mkdir);
 };
 
-BeardMeGenerator.prototype.projectfiles = function projectfiles() {
+BeardMeGenerator.prototype.buildFiles = function buildFiles() {
   var self = this;
-
-  [ // array to hold templated files (excluding actual template files for /public)
+  [
     // root files
     [ '_package.json',  'package.json' ],
     [ '_bower.json',    'bower.json'   ],
@@ -141,7 +129,7 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ '_.bowerrc',      '.bowerrc'     ],
     [ '_.gitignore',    '.gitignore'   ],
     [ '_.travis.yml',   '.travis.yml'  ],
-    // server/ files
+//    // server files
     [ 'server/_server.js',            'server/server.js'        ],
     [ 'server/api/_user.js',          'server/api/user.js'      ],
     [ 'server/api/_ping.js',          'server/api/ping.js'      ],
@@ -151,13 +139,10 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ 'server/schemas/_user.js',      'server/schemas/user.js'  ],
     [ 'server/test/_spec.js',         'server/test/spec.js'     ],
     // public/ files
-    [ 'public/_index.html',           'public/index.html'       ],
-    [ 'public/_SpecRunner.html',      'public/SpecRunner.html'  ],
-    // public/css files
+    [ 'public/_index.html',                               'public/index.html'                               ],
     [ 'public/css/_app.css',                              'public/css/app.css'                              ],
     [ 'public/css/_jasmine.css',                          'public/css/jasmine.css'                          ],
     [ 'public/css/includes/css/_custom.css',              'public/css/includes/css/custom.css'              ],
-    // public/js/app/{{ backbone stuff }}
     [ 'public/js/app/config/_Init.js',                    'public/js/app/config/Init.js'                    ],
     [ 'public/js/app/routers/_Router.js',                 'public/js/app/routers/Router.js'                 ],
     [ 'public/js/app/events/_Notifier.js',                'public/js/app/events/Notifier.js'                ],
@@ -171,7 +156,7 @@ BeardMeGenerator.prototype.projectfiles = function projectfiles() {
     [ 'public/js/app/collections/_TemplateCollection.js', 'public/js/app/collections/TemplateCollection.js' ],
     [ 'public/js/app/views/_TemplateView.js',             'public/js/app/views/TemplateView.js'             ],
     [ 'public/js/app/templates/_Template.html',           'public/js/app/templates/Template.html'           ]
-  ].forEach(function(file) { self.template(file[0], file[1]); });
+  ].forEach(function(files) { self.template(files[0], files[1]); });
 
   [ // files to copy w/o templating
     [ 'public/img/beard.png',           'public/img/beard.png'            ],

@@ -1,110 +1,150 @@
-// DEPENDENCIES
+// PROCESS THE ARGS
+// ================
+var args = {};
+process.argv.forEach(function(arg) {
+  arg = arg.match(/^--([^=]+)=(.+)$/);
+  if (arg)
+    args[arg[1]] = arg[2];
+});
+
+// INIT THE APP
 // ============
-var express       = require('express'),
-    bodyParser    = require('body-parser'),
-    errorHandler  = require('errorhandler'),
-    cookieParser  = require('cookie-parser'),
-    session       = require('express-session'),
-    morgan        = require('morgan'),<% if (inputs.ssl == false) { %>
-    http          = require('http'),<% } %><% if (inputs.ssl == true) { %>
-    https         = require('https'),
-    pem           = require('pem'),<% } %><% if (inputs.winston == true) { %>
-    winston       = require('winston'),<% } %><% if (inputs.socketio == true) { %>
-    socketio      = require('socket.io'),<% } %>
-    request       = require('request'),
-    mongoose      = require('mongoose'),
-    fs            = require('fs'),
-    path          = require('path');
+var async = require('async'),
+    express = require('express'),
+    app = module.exports = express(),
+    server;
 
-var config    = require('./config/config'),
-    paths     = {
-      api     : path.resolve(__dirname+'/api'),
-      schemas : path.resolve(__dirname+'/schemas'),
-      io      : path.resolve(__dirname+'/io')
-    },
-    app       = module.exports = express();
+// BUILD THE APP
+// ============
+async.series([
+  loadConfig,
+  loadLogger,
+  loadDb,
+  loadMiddleware,
+  loadApi,<% if (!inputs.ssl) { %>
+  loadHttpServer,<% } %><% if (inputs.ssl) { %>
+  loadHttpsServer,<% } %>
+  loadSocketIO,
+  startServer
+])
 
-<% if (inputs.winston == true) { %>// LOGGING CONFIGURATION
-// =====================
-app.logger = new(winston.Logger)({
-  transports: [
-    new (winston.transports.File)({
-      filename: './server/logs/app.log',
-      json: false
-    })
-  ]
-});
-var logStream = {
-  write: function(message, encoding){
-    app.logger.info(message.replace(/\n+/,''));
-  }
-};
+// LOAD THE APP CONFIG
+// ===================
+function loadConfig(done) {
+  app.config = require('./config/config')[args.env || 'dev'];
+  done();
+}
 
-<% } %>// DATABASE CONFIGURATION
-// ======================
-var dbstring  = 'mongodb://'+
-                ((config.db.username && config.db.password) ? config.db.username+':'+config.db.password+'@' : '')+
-                config.db.host+':'+config.db.port+'/'+config.db.dbname,
-    db        = mongoose.createConnection(dbstring);
-db.on('error', console.error.bind(console, 'DB connection error:'));
-db.once('open', function callback () {
-  console.log('Connected to ' + config.db.dbname);
-  fs.readdir(paths.schemas, function(err, files) {
+// LOAD THE LOGGER
+// ===============
+function loadLogger(done) {
+  var winston = require('winston');
+  app.logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.File)({
+        filename: './server/logs/app.log',
+        json: false
+      })
+    ]
+  });
+  app.logger.stream = {
+    write: function(message, encoding) {
+      app.logger.info(message.replace(/\n+/,''));
+    }
+  };
+  done();
+}
+
+// LOAD THE DB
+// ===========
+function loadDb(done) {
+  var mongoose = require('mongoose');
+  app.db = mongoose.createConnection('mongodb://'+app.config.db);
+  app.db.on('error', function(err) {
+    console.log('DB connection error:', err);
+    done();
+  });
+  app.db.once('open', function(){
+    console.log('\n\nDB connected: '+app.config.db+'\n\n');
+    _eachModuleIn('schemas', function(file) {
+      require(file)(app);
+    });
+    done();
+  });
+}
+
+// LOAD THE MIDDLEWARE
+// ===================
+function loadMiddleware(done) {
+  var express       = require('express'),
+      bodyParser    = require('body-parser'),
+      errorHandler  = require('errorhandler'),
+      cookieParser  = require('cookie-parser'),
+      session       = require('express-session'),
+      morgan        = require('morgan');
+  app.use(express.static(__dirname+'/../public'));
+  app.use(errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use(bodyParser());
+  app.use(cookieParser());
+  app.use(session({ secret: app.config.sessionSecret }));
+  app.use(morgan({ stream: app.logger.stream }));
+  done();
+}
+
+// LOAD THE API
+// ============
+function loadApi(done) {
+  _eachModuleIn('./api', function(file) {
+    require(file)(app);
+  });
+  done();
+}
+
+// LOAD THE SERVER
+// ================
+<% if (!inputs.ssl) { %>function loadHttpServer(done) {
+  var http = require('http');
+  server = http.createServer(app);
+  done();
+}<% } %>
+<% if (inputs.ssl) { %>function loadHttpsServer(done) {
+  var https = require('https'),
+      pem = require('pem');
+  pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
+    server = https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app);
+    done();
+  });
+}<% } %>
+
+// LOAD SOCKETIO
+// =============
+function loadSocketIO(done) {
+  var socketio = require('socket.io');
+  app.io = socketio.listen(server);
+  _eachModuleIn('./io', function(file) {
+    require(file)(app);
+  });
+  done();
+}
+
+// START THE SERVER
+// ================
+function startServer(done) {
+  server.listen(app.config.port);
+  console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http<% if (inputs.ssl) { %>s<% } %>://localhost:' + app.config.port + ' to wear your Beard\n\n');
+  app.emit('started');
+  done();
+}
+
+// Helper fn to load modules in a directory
+function _eachModuleIn(dir, callback) {
+  var fs = require('fs'),
+      path = require('path'),
+      dir = path.resolve(__dirname+'/'+dir);
+  fs.readdir(dir, function(err, files) {
     files.forEach(function(file) {
-      if (!/\.js$/.test(file)) return false;
-      require(paths.schemas+'/'+file)(db);
+      if (/.js$/.test(file))
+        callback(dir+'/'+file);
     });
   });
-});
-
-// APP CONFIGURATION
-// =================
-app.use(express.static(__dirname + '/../public'));
-app.use(errorHandler({
-  dumpExceptions: true,
-  showStack: true
-}));
-app.use(bodyParser());
-app.use(cookieParser());
-app.use(session({ secret: config.sessionSecret }));<% if (inputs.winston == true) { %>
-app.use(morgan({ stream: logStream }));<% } %>
-
-// READ THE API MODULES
-// ====================
-fs.readdir(paths.api, function(err, files) {
-  files.forEach(function(file) {
-    if (!/\.js$/.test(file)) return false;
-    require(paths.api+'/'+file)(app, db);
-  });
-});
-
-// KICK THIS PIG!
-// ==============
-<% if (inputs.ssl == false) { %>var server = http.createServer(app);
-server.on('listening', function() { app.emit('listening'); });<% if (inputs.socketio) { %>
-// SOCKET.IO CONFIGURATION
-// =======================
-var io = socketio.listen(server);
-fs.readdir(paths.io, function(err, files) {
-  files.forEach(function(file) {
-    if (!/\.js$/.test(file)) return false;
-    require(paths.io+'/'+file)(app, db, io);
-  });
-});<% } %>
-server.listen(config.port);<% } %><% if (inputs.ssl == true) { %>pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
-  var server = https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app);
-  server.on('listening', function() { app.emit('listening'); });<% if (inputs.socketio) { %>
-  // SOCKET.IO CONFIGURATION
-  // =======================
-  var io = socketio.listen(server);
-  fs.readdir(paths.io, function(err, files) {
-    files.forEach(function(file) {
-      if (!/\.js$/.test(file)) return false;
-      require(paths.io+'/'+file)(app, db, io);
-    });
-  });<% } %>
-  server.listen(config.port);
-});<% } %>
-
-console.log('\n\nYou\'ve been Bearded!\n\nPlease go to http<% if (inputs.ssl == true) { %>s<% } %>://localhost:' + config.port + ' to wear your Beard\n\n');
-
+}

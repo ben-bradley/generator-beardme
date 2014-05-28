@@ -1,6 +1,6 @@
 var request = require('request');
 
-module.exports = function(app, db) {
+module.exports = function(app) {
 
   // simple way to proxy JSON requests
   app.get(/\/api\/jsonp\/(.+)/, function(req, res) {

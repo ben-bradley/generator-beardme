@@ -7,7 +7,7 @@ var request = require('request'),
 // BEFORE HOOK
 before(function(done) {
   var app = require('../server');
-  app.on('listening', function() { done(); });
+  app.on('started', function() { done(); });
 });
 
 // TEST SUITES
@@ -15,7 +15,7 @@ describe('GET api/ping', function() {
 
   it('should return "{ pong: <timestamp> }"', function(done) {
     request.get({
-      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/ping',<% if (inputs.ssl == true) { %>
+      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/ping',<% if (inputs.ssl) { %>
       strictSSL: false, <% } %>
       json: true
     },
@@ -33,7 +33,7 @@ describe('GET api/jsonp', function() {
 
   it('should return .downloads', function(done) {
     request.get({
-      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/jsonp/https://api.npmjs.org/downloads/point/last-week/generator-beardme',<% if (inputs.ssl == true) { %>
+      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/jsonp/https://api.npmjs.org/downloads/point/last-week/generator-beardme',<% if (inputs.ssl) { %>
       strictSSL: false, <% } %>
       json: true
     },
