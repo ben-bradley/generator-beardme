@@ -1,5 +1,6 @@
 #Beard Me ![beard](https://raw.githubusercontent.com/ben-bradley/generator-beardme/master/app/templates/public/img/beard.png)
 Based on Randy Lebeau's Stacked, but customized to suit my tastes.
+
 [![NPM](https://nodei.co/npm/generator-beardme.png)](https://nodei.co/npm/generator-beardme/)
 
 ##Install
