@@ -1,5 +1,6 @@
 #Beard Me ![beard](https://raw.githubusercontent.com/ben-bradley/generator-beardme/master/app/templates/public/img/beard.png)
 Based on Randy Lebeau's Stacked, but customized to suit my tastes.
+[![NPM](https://nodei.co/npm/generator-beardme.png)](https://nodei.co/npm/generator-beardme/)
 
 ##Install
 - [NodeJS](http://nodejs.org/)
@@ -15,7 +16,7 @@ grunt server
 ```
 
 ##TODO
-- Build evented load to prevent `api/` from loading before `schemas/`
+- **Isolate db, api, logger, & app.use() blocks & use events to trigger loads**
 - Add `if (inputs.socketio) { ...` to the top of `MainView.js`
 - Write more tests
 - Clean up the `public/` side
