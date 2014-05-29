@@ -3,7 +3,6 @@ var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 
-
 var BeardMeGenerator = module.exports = function BeardMeGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
