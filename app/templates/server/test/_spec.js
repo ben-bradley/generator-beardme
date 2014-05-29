@@ -1,21 +1,21 @@
 // SERVER SIDE TEST SUITE
 var request = require('request'),
-    expect = require('expect.js'),
-    config = require('../config/config');
+    expect = require('expect.js');
 
 
 // BEFORE HOOK
 before(function(done) {
   var app = require('../server');
-  app.on('listening', function() { done(); });
+  app.on('started', function() { done(); });
 });
 
 // TEST SUITES
 describe('GET api/ping', function() {
+  this.timeout(2000);
 
   it('should return "{ pong: <timestamp> }"', function(done) {
     request.get({
-      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/ping',<% if (inputs.ssl == true) { %>
+      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/ping',<% if (inputs.ssl) { %>
       strictSSL: false, <% } %>
       json: true
     },
@@ -30,10 +30,11 @@ describe('GET api/ping', function() {
 });
 
 describe('GET api/jsonp', function() {
+  this.timeout(10000);
 
   it('should return .downloads', function(done) {
     request.get({
-      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/jsonp/https://api.npmjs.org/downloads/point/last-week/generator-beardme',<% if (inputs.ssl == true) { %>
+      url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/jsonp/https://api.npmjs.org/downloads/point/last-week/generator-beardme',<% if (inputs.ssl) { %>
       strictSSL: false, <% } %>
       json: true
     },

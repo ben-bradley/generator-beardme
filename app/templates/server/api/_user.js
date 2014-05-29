@@ -1,4 +1,4 @@
-module.exports = function(app, db) {
+module.exports = function(app) {
 
   // check current user
   app.get('/api/user', function(req, res) {
@@ -27,10 +27,10 @@ module.exports = function(app, db) {
 
   // get all users
   app.get('/api/users', function(req, res) {
-    db.model('User').find({}, function(err, users) {
+    app.db.model('User').find({}, function(err, users) {
       res.send(users);
     });
-//    db.model('User').myfindall(function(err, users) {
+//    app.db.model('User').myfindall(function(err, users) {
 //      res.send(users);
 //    });
   });

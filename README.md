@@ -17,14 +17,18 @@ grunt server
 ```
 
 ##TODO
-- **Isolate db, api, logger, & app.use() blocks & use events to trigger loads**
-- Add `if (inputs.socketio) { ...` to the top of `MainView.js`
 - Write more tests
 - Clean up the `public/` side
 - Re-work the non-dev aspects
-- Add Socket.IO (?)
 - Add sub-generator for MVC
 - ideas?
+
+##0.1.7
+- Made `winston` and `socket.io` enabled by default
+- Rewrote `server.js` to load components using `async.series()`
+- Created environment profiling options in `config.js`
+- Converted individual db vars to a single string
+- Put logging, io, db, & api under the `app` namesapce
 
 ##0.1.6
 - Added Socket.IO! You can select it at the `yo beardme` prompt.  Look in `public/js/app/views/MainView.js` for an example of how to use it.

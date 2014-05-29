@@ -4,7 +4,7 @@ var mongoose  = require('mongoose');
 
 module.exports = User;
 
-function User(db) {
+function User(app) {
 
   var Schema = new mongoose.Schema({
     name: String,
@@ -16,6 +16,6 @@ function User(db) {
     this.find(callback);
   };
 
-  db.model('User', Schema);
+  app.db.model('User', Schema);
 
 };
