@@ -14,7 +14,12 @@
   "homepage": "https://<%= inputs.github %>.github.io/<%= inputs.projectName %>",
   "keywords": [
     "generator-beardme",
-    "generator-stacked"
+    "express",
+    "async",
+    "request",
+    "mongoose",
+    "winston",
+    "socket.io"
   ],
   "bugs": {
     "url": "https://github.com/<%= inputs.github %>/<%= inputs.projectName %>/issues"

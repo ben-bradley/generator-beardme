@@ -16,7 +16,7 @@ var BeardMeGenerator = module.exports = function BeardMeGenerator(args, options,
       callback: function() {
         self.log.write('\n\n\nYou\'re almost there! You just have to init the build...\n\n');
         self.log.write('  $ grunt init\n\n');
-        self.log.write('Then update you\'re server/config/config.js with your details:\n\n');
+        self.log.write('Then verify your server/config/config.js details:\n\n');
         self.log.write('  $ vi server/config/config.js\n\n');
         self.log.write('You might also want to test it to make sure it\'s working:\n\n');
         self.log.write('  $ grunt test\n\n');
@@ -92,7 +92,6 @@ BeardMeGenerator.prototype.buildDirs = function buildDirs() {
     'server/config',
     'server/api',
     'server/schemas',
-    'server/db',
     'server/logs',
     'server/test',
     'server/io',

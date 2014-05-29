@@ -29,6 +29,80 @@
       <h2>Beards grown this week: <span id='beardCount' class='fa fa-circle-o-notch fa-spin'></span></h2>
       <p>Server time is: <span id='time' class='fa fa-circle-o-notch fa-spin'></span></p>
     </div>
+    <div>
+      <h2>Install</h2>
+      <ul>
+        <li><a href='http://nodejs.org'>NodeJS</a></li>
+        <li><a href='http://www.mongodb.org/downloads'>MongoDB</a></li>
+        <li>
+          Install Yeoman & Beardme<br>
+          <pre>npm install -g yeoman generator-beardme grunt-cli
+yo beardme
+grunt init
+grunt test
+grunt server</pre>
+        </li>
+      </ul>
+      <div class='row'>
+        <div class='col-md-6'>
+          <h2>Server-Side Components</h2>
+          <ul>
+            <li>Express - HTTP/API</li>
+            <li>Mongoose - MongoDB</li>
+            <li>Winston - Logging</li>
+            <li>Socket.IO - Websockets</li>
+          </ul>
+        </div>
+        <div class='col-md-6'>
+          <h2>Browser-Side Components</h2>
+          <ul>
+            <li>RequireJS - Loader</li>
+            <li>Backbone - MVC Framework</li>
+            <li>Bootstrap - The Pretty</li>
+          </ul>
+        </div>
+      </div>
+      <h2>TODO</h2>
+      <ul>
+        <li>Write more tests</li>
+        <li>clean up the <code>public/</code> side</li>
+        <li>Rework the non-dev aspects</li>
+        <li>Add sub-generators for MVC</li>
+        <li>stuff?</li>
+      </ul>
+      <h2>History</h2>
+<pre>
+##0.1.7
+- Made `winston` and `socket.io` enabled by default
+- Rewrote `server.js` to load components using `async.series()`
+- Created environment profiling options in `config.js`
+- Converted individual db vars to a single string
+- Put logging, io, db, & api under the `app` namesapce
+
+##0.1.6
+- Added Socket.IO! You can select it at the `yo beardme` prompt.  Look in `public/js/app/views/MainView.js` for an example of how to use it.
+- Prevented `Router.js` from loading `MainView.js` twice
+
+##0.1.5
+- **!!!UPDATED DEPENDENCIES!!!** - All dependencies are now current & tests work.  If your generated apps behave strangely, please let me know & I'll look in to it.
+- Added browser auto-launch on server start
+- Moved Yeoman prompt input vars into an `inputs` namespace
+- Wrote server tests
+- Added `jsonp.js` to the `server/api/`, look at `public/js/app/templates/Main.html` for how to use it =)
+- Added a beard counter using `jsonp.js`
+
+##0.1.4
+- Added Winston for logging
+
+##0.1.3
+- Rewrote the MongoDB Schema handler to use `Schema.statics` instead of `prototype`ing
+- Added prompts to populate config.js for MongoDB
+
+##0.1.2
+- Added support for SSL via the [PEM](http://npmjs.org/package/pem) module
+- Added some beardy bling
+</pre>
+    </div>
   </div>
 </div>
 

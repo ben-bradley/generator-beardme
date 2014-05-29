@@ -26,7 +26,7 @@ async.series([
   loadHttpsServer,<% } %>
   loadSocketIO,
   startServer
-])
+]);
 
 // LOAD THE APP CONFIG
 // ===================
@@ -106,8 +106,7 @@ function loadApi(done) {
   var http = require('http');
   server = http.createServer(app);
   done();
-}<% } %>
-<% if (inputs.ssl) { %>function loadHttpsServer(done) {
+}<% } %><% if (inputs.ssl) { %>function loadHttpsServer(done) {
   var https = require('https'),
       pem = require('pem');
   pem.createCertificate({ days: 1, selfSigned: true }, function(err, keys) {
