@@ -86,6 +86,7 @@ BeardMeGenerator.prototype.askFor = function askFor() {
 };
 
 BeardMeGenerator.prototype.buildDirs = function buildDirs() {
+  var self = this;
   [
     'server',
     'server/config',
@@ -112,7 +113,7 @@ BeardMeGenerator.prototype.buildDirs = function buildDirs() {
     'public/js/app/templates',
     'public/js/app/views',
     'public/js/app/events'
-  ].forEach(this.mkdir);
+  ].forEach(function(dir) { self.mkdir(dir); });
 };
 
 BeardMeGenerator.prototype.buildFiles = function buildFiles() {

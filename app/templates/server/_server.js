@@ -39,15 +39,24 @@ function loadConfig(done) {
 // ===============
 function loadLogger(done) {
   var winston = require('winston');
-  app.logger = new (winston.Logger)({
-    transports: [
-      new (winston.transports.File)({
-        filename: './server/logs/app.log',
-        json: false
-      })
-    ]
-  });
-  app.logger.stream = {
+  app.logger = {
+    access: new (winston.Logger)({
+      transports: [
+        new (winston.transports.File)({
+          filename: './server/logs/access.log',
+          json: false
+        })
+      ]
+    }),
+    debug: new (winston.Logger)({
+      transports: [
+        new (winston.transports.File)({
+          filename: './server/logs/debug.log'
+        })
+      ]
+    })
+  };
+  app.logger.access.stream = {
     write: function(message, encoding) {
       app.logger.info(message.replace(/\n+/,''));
     }
@@ -87,7 +96,7 @@ function loadMiddleware(done) {
   app.use(bodyParser());
   app.use(cookieParser());
   app.use(session({ secret: app.config.sessionSecret }));
-  app.use(morgan({ stream: app.logger.stream }));
+  app.use(morgan({ stream: app.logger.access.stream }));
   done();
 }
 
