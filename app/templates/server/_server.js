@@ -58,7 +58,7 @@ function loadLogger(done) {
   };
   app.logger.access.stream = {
     write: function(message, encoding) {
-      app.logger.info(message.replace(/\n+/,''));
+      app.logger.access.info(message.replace(/\n+/,''));
     }
   };
   done();

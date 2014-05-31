@@ -16,7 +16,7 @@ describe('GET api/ping', function() {
   it('should return "{ pong: <timestamp> }"', function(done) {
     request.get({
       url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/ping',<% if (inputs.ssl) { %>
-      strictSSL: false, <% } %>
+      strictSSL: false,<% } %>
       json: true
     },
     function(err, res, json) {
@@ -35,7 +35,7 @@ describe('GET api/jsonp', function() {
   it('should return .downloads', function(done) {
     request.get({
       url: 'http<% if (inputs.ssl) { %>s<% } %>://localhost:<%= inputs.httpPort %>/api/jsonp/https://api.npmjs.org/downloads/point/last-week/generator-beardme',<% if (inputs.ssl) { %>
-      strictSSL: false, <% } %>
+      strictSSL: false,<% } %>
       json: true
     },
     function(err, res, json) {
