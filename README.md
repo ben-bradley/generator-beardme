@@ -23,6 +23,10 @@ grunt server
 - Add sub-generator for MVC
 - ideas?
 
+##0.1.8
+- Fixed install on Mac
+- Modified `app.logger` to allow for multiple log files
+
 ##0.1.7
 - Made `winston` and `socket.io` enabled by default
 - Rewrote `server.js` to load components using `async.series()`
